@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class PhotosListCell extends StatelessWidget {
-  final String author, imageUrl, createTimeString;
+  final String titleString, imageUrl, subtitleString;
   final VoidCallback onTapEvent;
 
-  const PhotosListCell({super.key, required this.author, required this.imageUrl, required this.createTimeString, required this.onTapEvent});
+  const PhotosListCell({super.key, required this.titleString, required this.imageUrl, required this.subtitleString, required this.onTapEvent});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +23,8 @@ class PhotosListCell extends StatelessWidget {
               errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             ListTile(
-              title: Text(author, style: const TextStyle(fontWeight: FontWeight.bold)),
-              subtitle: Text(createTimeString),
+              title: Text(titleString, style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Text(subtitleString),
             ),
           ],
         ),
