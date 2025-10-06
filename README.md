@@ -4,7 +4,7 @@ A Flutter project for Photos List.
 
 ## Getting Started
 
-This project is a Flutter application displaying a list of photos and view each photo description. It also include search function.
+This project is a Flutter application displaying a list of photos by different locations and viewing each photo description. It contains search function allowing to search keywords in either location and createdBy. It also bookmark function to save the favorite photos.
 
 ## Setup
 This Flutter Application is using Flutter 3.10.0, Dart 3.0. 

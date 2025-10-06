@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 
 class PhotoDetailScreen extends StatefulWidget{
   final String screenTitle, imageUrl, location, description, createdBy, createdTimeString, takenAtString;
+  final bool isFavorite;
+  final void Function(bool pressed) onDetailPressedFavorite;
 
-  const PhotoDetailScreen({super.key, required this.screenTitle, required this.imageUrl, required this.location, required this.description, required this.createdBy, required this.createdTimeString, required this.takenAtString});
+  const PhotoDetailScreen({super.key, required this.screenTitle, required this.imageUrl, required this.location, required this.description, required this.createdBy, required this.createdTimeString, required this.takenAtString, required this.isFavorite, required this.onDetailPressedFavorite});
 
   @override
   State<StatefulWidget> createState() => _PhotoDetailScreen();
@@ -12,6 +14,13 @@ class PhotoDetailScreen extends StatefulWidget{
 }
 
 class _PhotoDetailScreen extends State<PhotoDetailScreen> {
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    _isFavorite = widget.isFavorite;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +45,7 @@ class _PhotoDetailScreen extends State<PhotoDetailScreen> {
                         Icons.arrow_circle_left_outlined,
                         color: Colors.grey.shade400,
                       ),
+                      tooltip: 'Back to Previous Page',
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ),
@@ -45,6 +55,17 @@ class _PhotoDetailScreen extends State<PhotoDetailScreen> {
               ListTile(
                 title: const Text('Location:', style: TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: Text(widget.location),
+                trailing: IconButton(
+                  isSelected: _isFavorite,
+                  icon: const Icon(Icons.favorite_outline),
+                  selectedIcon: const Icon(Icons.favorite),
+                  onPressed: () {
+                    setState(() {
+                      _isFavorite = !_isFavorite;
+                      widget.onDetailPressedFavorite(_isFavorite);
+                    });
+                  },
+                ),
               ),
               ListTile(
                 title: const Text('Description:', style: TextStyle(fontWeight: FontWeight.bold)),
