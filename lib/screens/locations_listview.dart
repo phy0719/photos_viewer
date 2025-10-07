@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:photos_viewer/appModel/photos_model.dart';
-import 'package:photos_viewer/utils/logger.dart';
 import 'package:photos_viewer/widgets/photos_list_component.dart';
 
 import '../model/photo.dart';

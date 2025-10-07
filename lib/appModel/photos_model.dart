@@ -3,9 +3,7 @@ import 'package:flutter_api_helper/flutter_api_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:photos_viewer/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../model/photo.dart';
-import '../utils/logger.dart';
 
 class PhotosModel extends ChangeNotifier{
   static PhotosModel get shared => getIt.get<PhotosModel>();
@@ -78,6 +76,14 @@ class PhotosModel extends ChangeNotifier{
     // construct useful data list
     updateLocationAndPhotosMappingData();
     resetSearchingList(false);
+  }
+
+  refreshFetchPhotos() async {
+    await fetchPhotos();
+
+    // The following just for testing used
+    // _photos.add(Photo(id: '0000', createdBy: 'Yan Poon', location: 'Testing', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Mooncake_3-4%2C_lotus_seed_paste.jpg/1200px-Mooncake_3-4%2C_lotus_seed_paste.jpg', createdAt: DateTime.now(), takenAt: DateTime.now()));
+    // updateLocationAndPhotosMappingData();
   }
 
   updateLocations(){

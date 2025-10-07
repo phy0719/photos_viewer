@@ -75,10 +75,7 @@ class _FavoriteListScreen extends State<FavoriteListScreen> {
                       ),
                     );
                   },
-                  onPhotosListCellPressedFavorite: (bool isFavorite) async {
-                    // logger.i('FavoriteListScreen: onPhotosListCellPressedFavorite: isFavorite? $isFavorite');
-                    await PhotosModel.shared.updateAllFavoriteDataOnChangeIsFavorite(isFavorite, _favoritePhotos[index].id);
-                  },
+                  onPhotosListCellPressedFavorite: null,
                   onPressedDeleteButton: () async {
                     await PhotosModel.shared.updateAllFavoriteDataOnChangeIsFavorite(false, _favoritePhotos[index].id);
                   },

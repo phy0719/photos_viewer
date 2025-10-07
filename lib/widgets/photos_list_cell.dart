@@ -62,13 +62,13 @@ class _PhotosListCell extends State<PhotosListCell>{
                   icon: const Icon(Icons.favorite_outline),
                   selectedIcon: const Icon(Icons.favorite),
                   onPressed: () {
-                    if (_isFavorite != null) {
+
                       if (mounted) {
                         setState(() {
-                          _isFavorite = !_isFavorite!;
+                          _isFavorite = !_isFavorite;
                         });
-                      }
-                      if (widget.onPhotosListCellPressedFavorite != null) widget.onPhotosListCellPressedFavorite!(_isFavorite!);
+
+                      if (widget.onPhotosListCellPressedFavorite != null) widget.onPhotosListCellPressedFavorite!(_isFavorite);
                     }
                 },
                 ) : null,

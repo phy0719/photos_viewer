@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photos_viewer/appModel/photos_model.dart';
 import 'package:photos_viewer/screens/favorite_list_screen.dart';
 import 'package:photos_viewer/screens/search_screen.dart';
 import 'locations_listview.dart';
@@ -28,6 +29,13 @@ class _HomeScreen extends State<HomeScreen> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(widget.screenTitle),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+                onPressed: () async {
+                  await PhotosModel.shared.refreshFetchPhotos();
+                })
+          ],
         ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {

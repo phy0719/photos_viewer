@@ -78,8 +78,8 @@ class _SearchScreen extends State<SearchScreen> {
                                         createdTimeString: dateFormat.format(p.createdAt),
                                         takenAtString: dateFormat.format(p.takenAt),
                                         isFavorite: PhotosModel.shared.favoriteIds.contains(p.id),
-                                        onDetailPressedFavorite: (bool pressed) {
-
+                                        onDetailPressedFavorite: (bool isFavorite) async {
+                                          await PhotosModel.shared.updateAllFavoriteDataOnChangeIsFavorite(isFavorite, p.id);
                                         }
                                     );
                                   },
