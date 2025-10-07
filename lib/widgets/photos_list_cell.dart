@@ -1,29 +1,39 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:photos_viewer/appModel/photos_model.dart';
 
 class PhotosListCell extends StatefulWidget {
-  final String titleString, imageUrl, subtitleString;
-  final bool? isFavorite;
+  final String id, titleString, imageUrl, subtitleString;
   final VoidCallback onTapEvent;
   final VoidCallback? onPressedDeleteButton;
-  final void Function(bool pressed) onPhotosListCellPressedFavorite;
+  final void Function(bool pressed)? onPhotosListCellPressedFavorite;
 
-  const PhotosListCell({super.key, required this.titleString, required this.imageUrl, required this.subtitleString, required this.onTapEvent, required this.isFavorite, required this.onPhotosListCellPressedFavorite, this.onPressedDeleteButton});
+  const PhotosListCell({super.key, required this.titleString, required this.imageUrl, required this.subtitleString, required this.onTapEvent, required this.onPhotosListCellPressedFavorite, this.onPressedDeleteButton, required this.id});
 
   @override
   State<StatefulWidget> createState() => _PhotosListCell();
 }
 class _PhotosListCell extends State<PhotosListCell>{
-  bool? _isFavorite = false;
+  bool _isFavorite = false;
+
+  updateIsFavoriteUI() {
+    if (mounted) {
+      setState(() {
+        _isFavorite = PhotosModel.shared.favoriteIds.contains(widget.id);
+      });
+    }
+  }
 
   @override
   void initState() {
-    _isFavorite = widget.isFavorite;
+    _isFavorite = PhotosModel.shared.favoriteIds.contains(widget.id);
+    PhotosModel.shared.addListener(updateIsFavoriteUI);
     super.initState();
   }
 
   @override
   void dispose() {
+    PhotosModel.shared.removeListener(updateIsFavoriteUI);
     super.dispose();
   }
 
@@ -46,8 +56,7 @@ class _PhotosListCell extends State<PhotosListCell>{
               title: Text(widget.titleString, style: const TextStyle(fontWeight: FontWeight.bold)),
               subtitle: Text(widget.subtitleString),
               trailing:
-              // only show favorite icon when this flag is not null
-              (_isFavorite != null)?
+              (widget.onPhotosListCellPressedFavorite != null)?
                 IconButton(
                   isSelected: _isFavorite,
                   icon: const Icon(Icons.favorite_outline),
@@ -59,7 +68,7 @@ class _PhotosListCell extends State<PhotosListCell>{
                           _isFavorite = !_isFavorite!;
                         });
                       }
-                      widget.onPhotosListCellPressedFavorite(_isFavorite!);
+                      if (widget.onPhotosListCellPressedFavorite != null) widget.onPhotosListCellPressedFavorite!(_isFavorite!);
                     }
                 },
                 ) : null,

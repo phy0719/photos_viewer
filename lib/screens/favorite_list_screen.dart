@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:photos_viewer/appModel/photos_model.dart';
 import 'package:photos_viewer/screens/photo_detail_screen.dart';
 import 'package:photos_viewer/utils/utils.dart';
-
 import '../model/photo.dart';
-import '../utils/logger.dart';
 import '../widgets/photos_list_cell.dart';
 
 class FavoriteListScreen extends StatefulWidget {
-  final List<Photo> photos;
-
-  const FavoriteListScreen({super.key, required this.photos});
+  const FavoriteListScreen({super.key});
 
   @override
   State<StatefulWidget> createState() => _FavoriteListScreen();
@@ -17,76 +14,89 @@ class FavoriteListScreen extends StatefulWidget {
 }
 
 class _FavoriteListScreen extends State<FavoriteListScreen> {
-  List<Photo> favoriteList = [];
-  List<Photo> getFavoritePhotosList() {
-    List<Photo> pl = [];
-    for (var p in widget.photos) {
-      if (favoriteIds.contains(p.id)) pl.add(p);
+  List<Photo> _favoritePhotos = [];
+
+  updateFavoritePhotosUI() {
+    if (mounted){
+      setState(() {
+        _favoritePhotos = PhotosModel.shared.favoriteList;
+      });
     }
-    return pl;
   }
+
   @override
   void initState() {
-    favoriteList = getFavoritePhotosList();
+    _favoritePhotos = PhotosModel.shared.favoriteList;
+    PhotosModel.shared.addListener(updateFavoritePhotosUI);
     super.initState();
   }
+
+  @override
+  void dispose() {
+    PhotosModel.shared.removeListener(updateFavoritePhotosUI);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: favoriteList.length,
-      itemBuilder: (context, index) {
-        return PhotosListCell(
-            isFavorite: null,
-            imageUrl: favoriteList[index].url,
-            subtitleString: 'Created by ${favoriteList[index].createdBy}\nCreated at ${dateFormat.format(favoriteList[index].createdAt)}',
-            titleString: 'Location: ${favoriteList[index].location}',
-            onTapEvent: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return PhotoDetailScreen(
-                    screenTitle: 'Detail',
-                    imageUrl: favoriteList[index].url,
-                    location: favoriteList[index].location,
-                    description: favoriteList[index].description?? "",
-                    createdBy: favoriteList[index].createdBy,
-                    createdTimeString: dateFormat.format(favoriteList[index].createdAt),
-                    takenAtString: dateFormat.format(favoriteList[index].takenAt),
-                    isFavorite: favoriteIds.contains(favoriteList[index].id),
-                    onDetailPressedFavorite: (bool isFavorite) async{
-                      logger.i('FavoriteListScreen: onDetailPressedFavorite? $isFavorite');
-                      await updateFavoriteIds(isFavorite, favoriteList[index].id);
-                      if (mounted) {
-                        setState(() {
-                          favoriteList = getFavoritePhotosList();
-                        });
-                      }
-                    },
-                  );
-                },
-              ),
+    final dateFormat = PhotosModel.shared.dateFormat;
+    return FutureBuilder(
+        future: getIt.allReady(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: _favoritePhotos.length,
+              itemBuilder: (context, index) {
+                return PhotosListCell(
+                  id: _favoritePhotos[index].id,
+                  imageUrl: _favoritePhotos[index].url,
+                  subtitleString: 'Created by ${_favoritePhotos[index].createdBy}\nCreated at ${dateFormat.format(_favoritePhotos[index].createdAt)}',
+                  titleString: 'Location: ${_favoritePhotos[index].location}',
+                  onTapEvent: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return PhotoDetailScreen(
+                            screenTitle: 'Detail',
+                            imageUrl: _favoritePhotos[index].url,
+                            location: _favoritePhotos[index].location,
+                            description: _favoritePhotos[index].description?? "",
+                            createdBy: _favoritePhotos[index].createdBy,
+                            createdTimeString: dateFormat.format(_favoritePhotos[index].createdAt),
+                            takenAtString: dateFormat.format(_favoritePhotos[index].takenAt),
+                            isFavorite: true,
+                            onDetailPressedFavorite: (bool isFavorite) async{
+                              // logger.i('FavoriteListScreen: onDetailPressedFavorite? $isFavorite');
+                              await PhotosModel.shared.updateAllFavoriteDataOnChangeIsFavorite(isFavorite, _favoritePhotos[index].id);
+
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  onPhotosListCellPressedFavorite: (bool isFavorite) async {
+                    // logger.i('FavoriteListScreen: onPhotosListCellPressedFavorite: isFavorite? $isFavorite');
+                    await PhotosModel.shared.updateAllFavoriteDataOnChangeIsFavorite(isFavorite, _favoritePhotos[index].id);
+                  },
+                  onPressedDeleteButton: () async {
+                    await PhotosModel.shared.updateAllFavoriteDataOnChangeIsFavorite(false, _favoritePhotos[index].id);
+                  },
+                );
+              },
             );
-          },
-            onPhotosListCellPressedFavorite: (bool isFavorite) async {
-              logger.i('FavoriteListScreen: onPhotosListCellPressedFavorite: isFavorite? $isFavorite');
-              await updateFavoriteIds(isFavorite, favoriteList[index].id);
-              if (mounted) {
-                setState(() {
-                  favoriteList = getFavoritePhotosList();
-                });
-              }
-          },
-          onPressedDeleteButton: () async {
-            await updateFavoriteIds(false, favoriteList[index].id);
-            if (mounted) {
-              setState(() {
-                favoriteList = getFavoritePhotosList();
-              });
-            }
-          },
-        );
-      },
-    );
+          } else {
+            return const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('FavoriteListScreen: Waiting for initialisation'),
+                SizedBox(height: 16),
+                CircularProgressIndicator(),
+              ],
+            );
+          }
+        });
   }
 
 }

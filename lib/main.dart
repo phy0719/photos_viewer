@@ -1,27 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_api_helper/flutter_api_helper.dart';
-import 'package:photos_viewer/model/photo.dart';
+import 'package:photos_viewer/appModel/photos_model.dart';
 import 'package:photos_viewer/screens/home_screen.dart';
 import 'package:photos_viewer/utils/utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  // 🔧 Configure once, use everywhere
-  ApiHelper.configure(
-    const ApiConfig(
-      baseUrl: 'https://qchkdevhiring.blob.core.windows.net/mobile/api',
-      enableLogging: true,
-      timeout: Duration(seconds: 30),
-      // 🧠 Smart caching out of the box
-      cacheConfig: CacheConfig(duration: Duration(minutes: 5)),
-      // 🔄 Auto-retry with exponential backoff
-      retryConfig: RetryConfig(maxRetries: 3),
-    ),
-  );
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  favoriteIds = prefs.getStringList('savedIds')?? [];
+
+  // register the model class for late use
+  final photosModel = PhotosModel();
+  await photosModel.init();
+  getIt.registerSingleton(photosModel);
+
   runApp(const MyApp());
 }
 
@@ -30,9 +19,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-    return ApiBuilder<List<Photo>>(
-      future: fetchPhotos(),
-      builder: (photos) => MaterialApp(
+    return MaterialApp(
         title: 'Flutter Photos Viewer',
         theme: ThemeData(
           // This is the theme of your application.
@@ -53,12 +40,8 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: HomeScreen(screenTitle: 'Photos Viewer', photosList: photos) ,
-      ),
-      loading: const Center(child: CircularProgressIndicator()),
-      error: (error) => ErrorWidget('Failed to load photos from api: ${error.message}'),
-      empty: const Center(child: Text('No photos found')),
-    );
+        home: const HomeScreen(screenTitle: 'Photos Viewer') ,
+      );
   }
 }
 
