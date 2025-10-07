@@ -48,22 +48,19 @@ class _LocationsExpandedTileListScreen extends State<LocationsListView> {
         future: getIt.allReady(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  //display the location name as the section title
-                  for (var l in _locations)
-                    ExpansionTile(
-                      title: Text(l, style: const TextStyle(fontWeight: FontWeight.bold)),
-                      //display the location section index and number of photos in each section with the handle of plural
-                      subtitle: Text('This location contains ${_photosByLocations[l]?.length} photo${(_photosByLocations[l] != null && _photosByLocations[l]!.length > 1)? 's.':'.' }'),
+            return ListView.builder(
+                itemCount: _locations.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ExpansionTile(
+                    title: Text(_locations[index], style: const TextStyle(fontWeight: FontWeight.bold)),
+                    //display the location section index and number of photos in each section with the handle of plural
+                    subtitle: Text('This location contains ${_photosByLocations[_locations[index]]?.length} photo${(_photosByLocations[_locations[index]] != null && _photosByLocations[_locations[index]]!.length > 1)? 's.':'.' }'),
                       children: [
-                        PhotosListComponents(photos: _photosByLocations[l]??[])
+                        PhotosListComponents(photos: _photosByLocations[_locations[index]]??[])
                       ],
-                    )
-                ],
-              ),
-            );
+                  );
+                },
+              );
           } else {
             return const Column(
               mainAxisAlignment: MainAxisAlignment.center,

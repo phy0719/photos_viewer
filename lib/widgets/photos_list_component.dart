@@ -32,7 +32,7 @@ class _PhotosListScreen extends State<PhotosListComponents> {
         future: getIt.allReady(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return  Column(
+            return Column(
               children: [
                 for (var p in widget.photos)
                   PhotosListCell(
