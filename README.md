@@ -32,4 +32,25 @@ pod insatall
 pod update
 ```
 
+## Building Tools
+### Android Studio (For Flutter development and app building)
+Android Studio Giraffe | 2022.3.1 Patch 4
+Build #AI-223.8836.35.2231.11090377, built on November 14, 2023
+Runtime version: 17.0.6+0-17.0.6b829.9-10027231 x86_64
+VM: OpenJDK 64-Bit Server VM by JetBrains s.r.o.
 
+Non-Bundled Plugins:
+Dart (223.8977)
+com.intellij.plugins.macoskeymap (223.7571.117)
+idea.plugin.protoeditor (223.8214.6)
+com.jetbrains.kmm (0.8.1(223)-26)
+io.flutter (77.1.1)
+
+### Xcode (For Building iOS application)
+Xcode Version (16.4)(16F6)
+MacOS Sequoia Version 15.6 (24G84)
+
+## Testing Devices
+iPhone Simulator 15(iOS 17.5)
+Android Emulator: Pixel 6a with Google Play (API level 34)
+Real Device: iPhone 15 Pro(iOS 18.6.2)
