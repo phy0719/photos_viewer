@@ -13,6 +13,7 @@ class PhotosModel extends ChangeNotifier{
   final String _baseUrl = 'https://api.json-generator.com/templates';
   final String _photosUrlPath = '/IKlaYT4D44DX/data';
   final String _refreshPhotosUrlPath = '/TxtWlKQr4IQe/data';
+  String _refreshingPath = '';
 
   DateFormat get dateFormat => DateFormat.yMMMMEEEEd().add_jms();
   String get prefKeyFavoriteIds => 'savedIds';
@@ -25,11 +26,6 @@ class PhotosModel extends ChangeNotifier{
 
   late List<String> _locations = [];
   List<String> get locations => _locations;
-
-  // to store the photos by different location
-  late Map<String, List<Photo>> _photosLocationMappingList = {};
-  Map<String, List<Photo>> get photosLocationMappingList =>
-      _photosLocationMappingList;
 
   late List<String> _favoriteIds = [];
   List<String> get favoriteIds => _favoriteIds;
@@ -73,8 +69,6 @@ class PhotosModel extends ChangeNotifier{
       _photos.add(Photo.fromJson(item));
     }
     _photos.sort((a, b) {
-      int cmp = a.location.compareTo(b.location);
-      if (cmp != 0) return cmp;
       return b.createdAt.compareTo(a.createdAt);
     });
 
@@ -84,11 +78,8 @@ class PhotosModel extends ChangeNotifier{
   }
 
   refreshFetchPhotos() async {
-    await fetchPhotos(_refreshPhotosUrlPath);
-
-    // The following just for testing used
-    // _photos.add(Photo(id: '0000', createdBy: 'Yan Poon', location: 'Testing', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Mooncake_3-4%2C_lotus_seed_paste.jpg/1200px-Mooncake_3-4%2C_lotus_seed_paste.jpg', createdAt: DateTime.now(), takenAt: DateTime.now()));
-    // updateLocationAndPhotosMappingData();
+    _refreshingPath = _refreshingPath == _refreshPhotosUrlPath? _photosUrlPath : _refreshPhotosUrlPath;
+    await fetchPhotos(_refreshingPath);
   }
 
   updateLocations(){
@@ -99,20 +90,8 @@ class PhotosModel extends ChangeNotifier{
     }
   }
 
-  //To assign the photos according to location
-  updatePhotosLocationsMapping() {
-    _photosLocationMappingList = {}; //initial with empty map
-    for (var l in _locations) {
-      _photosLocationMappingList[l] = [];
-      for (var p in _photos) {
-        if (p.location == l) _photosLocationMappingList[l]?.add(p);
-      }
-    }
-  }
-
   updateLocationAndPhotosMappingData() {
     updateLocations();
-    updatePhotosLocationsMapping();
     notifyListeners();
   }
 
