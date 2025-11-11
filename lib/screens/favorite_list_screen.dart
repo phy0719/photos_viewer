@@ -61,6 +61,7 @@ class _FavoriteListScreen extends State<FavoriteListScreen> {
                             imageUrl: _favoritePhotos[index].url,
                             location: _favoritePhotos[index].location,
                             description: _favoritePhotos[index].description?? "",
+                            emailString: _favoritePhotos[index].email,
                             createdBy: _favoritePhotos[index].createdBy,
                             createdTimeString: dateFormat.format(_favoritePhotos[index].createdAt),
                             takenAtString: dateFormat.format(_favoritePhotos[index].takenAt),

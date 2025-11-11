@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class PhotoDetailScreen extends StatefulWidget{
   final String screenTitle, imageUrl, location, description, createdBy, createdTimeString, takenAtString;
+  final String? emailString;
   final bool isFavorite;
   final void Function(bool pressed) onDetailPressedFavorite;
 
-  const PhotoDetailScreen({super.key, required this.screenTitle, required this.imageUrl, required this.location, required this.description, required this.createdBy, required this.createdTimeString, required this.takenAtString, required this.isFavorite, required this.onDetailPressedFavorite});
+  const PhotoDetailScreen({super.key, required this.screenTitle, required this.imageUrl, required this.location, required this.description, required this.createdBy, required this.createdTimeString, required this.takenAtString, required this.isFavorite, required this.onDetailPressedFavorite, this.emailString});
 
   @override
   State<StatefulWidget> createState() => _PhotoDetailScreen();
@@ -75,6 +77,25 @@ class _PhotoDetailScreen extends State<PhotoDetailScreen> {
                 title: const Text('Created By:', style: TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: Text(widget.createdBy),
               ),
+              widget.emailString != null && widget.emailString!.isNotEmpty ?
+                ListTile(
+                  title: const Text('Email:', style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle:
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: GestureDetector(
+                          onTap: () async {
+                              final Email email = Email(
+                                body: 'Sent From PhotoView by Yan',
+                                subject: 'PhotoView Notice',
+                                recipients: [widget.emailString!],
+                                isHTML: false);
+
+                              await FlutterEmailSender.send(email);
+                            },
+                        child: Text(widget.emailString!, style: const TextStyle(color: Colors.blue)),
+                      ))
+                ) : Container(),
               ListTile(
                 title: const Text('Created At:', style: TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: Text(widget.createdTimeString),

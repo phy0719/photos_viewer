@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_api_helper/flutter_api_helper.dart';
 import 'package:intl/intl.dart';
+import 'package:photos_viewer/utils/logger.dart';
 import 'package:photos_viewer/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/photo.dart';
@@ -9,8 +10,9 @@ class PhotosModel extends ChangeNotifier{
   static PhotosModel get shared => getIt.get<PhotosModel>();
 
   SharedPreferences? _sharedPreferences;
-  final String _baseUrl = 'https://qchkdevhiring.blob.core.windows.net/mobile/api';
-  final String _photosUrlPath = '/photos';
+  final String _baseUrl = 'https://api.json-generator.com/templates';
+  final String _photosUrlPath = '/IKlaYT4D44DX/data';
+  final String _refreshPhotosUrlPath = '/TxtWlKQr4IQe/data';
 
   DateFormat get dateFormat => DateFormat.yMMMMEEEEd().add_jms();
   String get prefKeyFavoriteIds => 'savedIds';
@@ -41,6 +43,9 @@ class PhotosModel extends ChangeNotifier{
        ApiConfig(
         baseUrl: _baseUrl,
         enableLogging: true,
+        getToken: () async {
+          return 'ee7lnsi9j3p135tq7bwntvzwx71ikuhys81lnrgp';
+        },
         timeout: const Duration(seconds: 30),
         // 🧠 Smart caching out of the box
         cacheConfig: const CacheConfig(duration: Duration(minutes: 5)),
@@ -51,7 +56,7 @@ class PhotosModel extends ChangeNotifier{
 
     _sharedPreferences ??= await getSharedPreferences();
 
-    await fetchPhotos();
+    await fetchPhotos(_photosUrlPath);
 
     getFavoriteListData();
   }
@@ -61,8 +66,8 @@ class PhotosModel extends ChangeNotifier{
   }
 
   // get Photos Result from API call
-  fetchPhotos() async{
-    final data = await ApiHelper.get(_photosUrlPath);
+  fetchPhotos(String apiUrl) async{
+    final data = await ApiHelper.get(apiUrl);
     _photos = [];
     for (var item in data) {
       _photos.add(Photo.fromJson(item));
@@ -79,7 +84,7 @@ class PhotosModel extends ChangeNotifier{
   }
 
   refreshFetchPhotos() async {
-    await fetchPhotos();
+    await fetchPhotos(_refreshPhotosUrlPath);
 
     // The following just for testing used
     // _photos.add(Photo(id: '0000', createdBy: 'Yan Poon', location: 'Testing', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Mooncake_3-4%2C_lotus_seed_paste.jpg/1200px-Mooncake_3-4%2C_lotus_seed_paste.jpg', createdAt: DateTime.now(), takenAt: DateTime.now()));

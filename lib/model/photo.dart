@@ -5,10 +5,11 @@ part 'photo.g.dart';
 @JsonSerializable()
 class Photo {
   final String id, createdBy, location, url;
-  final String? description;
+  final String? description, email;
   final DateTime createdAt, takenAt;
+  final Map<String, double>? coordinates;
 
-  Photo({required this.id, required this.createdBy, required this.location, required this.url, this.description,
+  Photo( {this.email, this.coordinates, required this.id, required this.createdBy, required this.location, required this.url, this.description,
     required this.createdAt, required this.takenAt});
 
   /// Connect the generated [_$PhotoFromJson] function to the `fromJson`

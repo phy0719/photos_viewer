@@ -74,6 +74,7 @@ class _SearchScreen extends State<SearchScreen> {
                                         imageUrl: p.url,
                                         location: p.location,
                                         description: p.description?? "",
+                                        emailString: p.email,
                                         createdBy: p.createdBy,
                                         createdTimeString: dateFormat.format(p.createdAt),
                                         takenAtString: dateFormat.format(p.takenAt),

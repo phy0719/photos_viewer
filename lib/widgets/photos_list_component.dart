@@ -50,6 +50,7 @@ class _PhotosListScreen extends State<PhotosListComponents> {
                               location: p.location,
                               description: p.description?? "",
                               createdBy: p.createdBy,
+                              emailString: p.email,
                               createdTimeString: dateFormat.format(p.createdAt),
                               takenAtString: dateFormat.format(p.takenAt),
                               isFavorite: PhotosModel.shared.favoriteIds.contains(p.id),
