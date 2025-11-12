@@ -30,9 +30,6 @@ class PhotosModel extends ChangeNotifier{
   late List<String> _favoriteIds = [];
   List<String> get favoriteIds => _favoriteIds;
 
-  late List<Photo> _favoriteList = [];
-  List<Photo> get favoriteList => _favoriteList;
-
   init() async {
     // 🔧 Configure once, use everywhere
     ApiHelper.configure(
@@ -54,7 +51,7 @@ class PhotosModel extends ChangeNotifier{
 
     await fetchPhotos(_photosUrlPath);
 
-    getFavoriteListData();
+    updateFavoriteIdsList();
   }
 
   Future<SharedPreferences> getSharedPreferences() async {
@@ -69,7 +66,7 @@ class PhotosModel extends ChangeNotifier{
       _photos.add(Photo.fromJson(item));
     }
     _photos.sort((a, b) {
-      return b.createdAt.compareTo(a.createdAt);
+      return a.createdAt.compareTo(b.createdAt);
     });
 
     // construct useful data list
@@ -130,17 +127,13 @@ class PhotosModel extends ChangeNotifier{
     _sharedPreferences!.setStringList(prefKeyFavoriteIds, saved);
   }
 
-  getFavoriteListData() async {
-    _favoriteList = [];
+  updateFavoriteIdsList() async {
     _favoriteIds = await getFavoriteIds();
-    for (var p in _photos) {
-      if (_favoriteIds.contains(p.id)) _favoriteList.add(p);
-    }
   }
 
   updateAllFavoriteDataOnChangeIsFavorite(bool isFavorite, String pId) async {
     await updateFavoriteIds(isFavorite, pId);
-    await getFavoriteListData();
+    await updateFavoriteIdsList();
     notifyListeners();
   }
 

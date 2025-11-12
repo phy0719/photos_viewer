@@ -19,14 +19,14 @@ class _FavoriteListScreen extends State<FavoriteListScreen> {
   updateFavoritePhotosUI() {
     if (mounted){
       setState(() {
-        _favoritePhotos = PhotosModel.shared.favoriteList;
+        _favoritePhotos = PhotosModel.shared.photos.where((element) => PhotosModel.shared.favoriteIds.contains(element.id)).toList();
       });
     }
   }
 
   @override
   void initState() {
-    _favoritePhotos = PhotosModel.shared.favoriteList;
+    _favoritePhotos = PhotosModel.shared.photos.where((element) => PhotosModel.shared.favoriteIds.contains(element.id)).toList();
     PhotosModel.shared.addListener(updateFavoritePhotosUI);
     super.initState();
   }
