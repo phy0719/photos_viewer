@@ -39,7 +39,7 @@ class _FavoriteListScreen extends State<FavoriteListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = PhotosModel.shared.dateFormat;
+    final dateFormat = PhotosModel.shared.generalDatetimeFormat;
     return FutureBuilder(
         future: getIt.allReady(),
         builder: (context, snapshot) {

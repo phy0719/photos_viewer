@@ -37,9 +37,16 @@ class _PhotoListByMonthScreen extends State<PhotoListByMonthScreen> {
     PhotosModel.shared.removeListener(updatePhotosList);
   }
 
+  bool shouldAddMonthTitle(int index) {
+    //always add title when it is first row
+    if (index == 0) return true;
+    return !Utils.areDatesInSameMonth(_photos[index].createdAt, _photos[index-1].createdAt);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final dateFormat = PhotosModel.shared.dateFormat;
+    final generalDateFormat = PhotosModel.shared.generalDatetimeFormat;
+    final titleDateFormat = PhotosModel.shared.monthYearFormat;
     return FutureBuilder(
         future: getIt.allReady(),
         builder: (context, snapshot) {
@@ -47,40 +54,53 @@ class _PhotoListByMonthScreen extends State<PhotoListByMonthScreen> {
             return ListView.builder(
               itemCount: _photos.length,
               itemBuilder: (context, index) {
-                return  PhotosListCell(
-                  id: _photos[index].id,
-                  imageUrl: _photos[index].url,
-                  subtitleString: 'Created at ${dateFormat.format(_photos[index].createdAt)}',
-                  titleString: 'Created by ${_photos[index].createdBy}',
-                  onTapEvent: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return PhotoDetailScreen(
-                            screenTitle: 'Detail',
-                            imageUrl: _photos[index].url,
-                            location: _photos[index].location,
-                            description: _photos[index].description?? "",
-                            createdBy: _photos[index].createdBy,
-                            emailString: _photos[index].email,
-                            createdTimeString: dateFormat.format(_photos[index].createdAt),
-                            takenAtString: dateFormat.format(_photos[index].takenAt),
-                            isFavorite: PhotosModel.shared.favoriteIds.contains(_photos[index].id),
-                            onDetailPressedFavorite: (bool isFavorite) async{
-                              // logger.i('PhotoDetailScreen: onPressedFavorite? $isFavorite');
+                return Column(
+                  children: [
+                    // add the month title to show the photos in the same month
+                    (shouldAddMonthTitle(index))?
+                    ListTile(title: Text(titleDateFormat.format(_photos[index].createdAt),
+                        style: const TextStyle(fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.purple,
+                            color: Colors.purple)))
+                        :Container(),
+                    PhotosListCell(
+                      id: _photos[index].id,
+                      imageUrl: _photos[index].url,
+                      subtitleString: 'Created by ${_photos[index].createdBy}\nCreated at ${generalDateFormat.format(_photos[index].createdAt)}',
+                      titleString: 'Location: ${_photos[index].location}',
+                      onTapEvent: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return PhotoDetailScreen(
+                                screenTitle: 'Detail',
+                                imageUrl: _photos[index].url,
+                                location: _photos[index].location,
+                                description: _photos[index].description?? "",
+                                createdBy: _photos[index].createdBy,
+                                emailString: _photos[index].email,
+                                createdTimeString: generalDateFormat.format(_photos[index].createdAt),
+                                takenAtString: generalDateFormat.format(_photos[index].takenAt),
+                                isFavorite: PhotosModel.shared.favoriteIds.contains(_photos[index].id),
+                                onDetailPressedFavorite: (bool isFavorite) async{
+                                  // logger.i('PhotoDetailScreen: onPressedFavorite? $isFavorite');
 
-                              await PhotosModel.shared.updateAllFavoriteDataOnChangeIsFavorite(isFavorite, _photos[index].id);
+                                  await PhotosModel.shared.updateAllFavoriteDataOnChangeIsFavorite(isFavorite, _photos[index].id);
+                                },
+                              );
                             },
-                          );
-                        },
-                      ),
-                    );
-                  },
-                  onPhotosListCellPressedFavorite: (bool isFavorite) async {
-                    // logger.i('onPhotosListCellPressedFavorite: isFavorite? $isFavorite');
-                    await PhotosModel.shared.updateAllFavoriteDataOnChangeIsFavorite(isFavorite, _photos[index].id);
-                  },
+                          ),
+                        );
+                      },
+                      onPhotosListCellPressedFavorite: (bool isFavorite) async {
+                        // logger.i('onPhotosListCellPressedFavorite: isFavorite? $isFavorite');
+                        await PhotosModel.shared.updateAllFavoriteDataOnChangeIsFavorite(isFavorite, _photos[index].id);
+                      },
+                    )
+                  ],
                 );
+
               },
             );
           } else {

@@ -15,7 +15,8 @@ class PhotosModel extends ChangeNotifier{
   final String _refreshPhotosUrlPath = '/TxtWlKQr4IQe/data';
   String _refreshingPath = '';
 
-  DateFormat get dateFormat => DateFormat.yMMMMEEEEd().add_jms();
+  DateFormat get generalDatetimeFormat => DateFormat.yMMMMEEEEd().add_jms();
+  DateFormat get monthYearFormat => DateFormat.yMMM();
   String get prefKeyFavoriteIds => 'savedIds';
 
   late List<Photo> _photos = [];

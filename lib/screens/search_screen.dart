@@ -26,7 +26,7 @@ class _SearchScreen extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = getIt<PhotosModel>().dateFormat;
+    final dateFormat = getIt<PhotosModel>().generalDatetimeFormat;
     return FutureBuilder(
       future: getIt.allReady(),
       builder: (context, snapshot) {

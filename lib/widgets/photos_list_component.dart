@@ -27,7 +27,7 @@ class _PhotosListScreen extends State<PhotosListComponents> {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = PhotosModel.shared.dateFormat;
+    final dateFormat = PhotosModel.shared.generalDatetimeFormat;
     return FutureBuilder(
         future: getIt.allReady(),
         builder: (context, snapshot) {
