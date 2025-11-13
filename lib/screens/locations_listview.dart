@@ -15,14 +15,12 @@ class LocationsListView extends StatefulWidget {
 
 class _LocationsExpandedTileListScreen extends State<LocationsListView> {
   List<String> _locations = [];
-  Map<String, List<Photo>> _photosByLocations = {};
 
   updateUI() {
     // logger.i('_LocationsExpandedTileListScreen:updateUI');
     if (mounted) {
       setState(() {
         _locations = PhotosModel.shared.locations;
-        _photosByLocations = PhotosModel.shared.photosLocationMappingList;
       });
     }
   }
@@ -30,7 +28,6 @@ class _LocationsExpandedTileListScreen extends State<LocationsListView> {
   @override
   void initState() {
     _locations = PhotosModel.shared.locations;
-    _photosByLocations = PhotosModel.shared.photosLocationMappingList;
     PhotosModel.shared.addListener(updateUI);
     super.initState();
   }
@@ -50,12 +47,13 @@ class _LocationsExpandedTileListScreen extends State<LocationsListView> {
             return ListView.builder(
                 itemCount: _locations.length,
                 itemBuilder: (BuildContext context, int index) {
+                  List<Photo> photosInLocation = PhotosModel.shared.photos.where((element) => element.location == _locations[index]).toList();
                   return ExpansionTile(
                     title: Text(_locations[index], style: const TextStyle(fontWeight: FontWeight.bold)),
                     //display the location section index and number of photos in each section with the handle of plural
-                    subtitle: Text('This location contains ${_photosByLocations[_locations[index]]?.length} photo${(_photosByLocations[_locations[index]] != null && _photosByLocations[_locations[index]]!.length > 1)? 's.':'.' }'),
+                    subtitle: Text('This location contains ${photosInLocation.length} photo${(photosInLocation.length > 1)? 's.':'.' }'),
                       children: [
-                        PhotosListComponents(photos: _photosByLocations[_locations[index]]??[])
+                        PhotosListComponents(photos: photosInLocation)
                       ],
                   );
                 },

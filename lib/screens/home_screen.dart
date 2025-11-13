@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:photos_viewer/appModel/photos_model.dart';
 import 'package:photos_viewer/screens/favorite_list_screen.dart';
+import 'package:photos_viewer/screens/photo_list_by_month_screen.dart';
 import 'package:photos_viewer/screens/search_screen.dart';
 import 'locations_listview.dart';
 
@@ -48,24 +49,32 @@ class _HomeScreen extends State<HomeScreen> {
         selectedIndex: _currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.photo, color: Colors.grey),
+            selectedIcon: Icon(Icons.photo_outlined, color: Colors.grey),
             icon: Icon(Icons.photo, color: Colors.purple),
-            label: 'Photos',
+            label: 'All Photos',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.map_outlined, color: Colors.grey),
+            icon: Icon(Icons.map, color: Colors.purple),
+            label: 'By Location',
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.search, color: Colors.grey),
             icon: Icon(Icons.search, color: Colors.purple),
-            label: 'Search',
+            label: 'By Search',
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.bookmark_added, color: Colors.grey),
             icon: Icon(Icons.bookmark_added, color: Colors.purple),
-            label: 'Favourite',
+            label: 'My Favourite',
           ),
         ],
       ),
       body: <Widget>[
-        /// Photo page
+        /// Photo by Location page
+        const PhotoListByMonthScreen(),
+
+        /// Photo by Location page
         const LocationsListView(),
 
         /// Search page
