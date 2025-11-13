@@ -4,11 +4,15 @@ A Flutter project for Photos List.
 
 ## Getting Started
 
-This project is a Flutter application displaying a list of photos by different locations and viewing each photo description. It contains search function allowing to search keywords in either location and createdBy. It also bookmark function to save the favorite photos.
+This project is a Flutter application displaying a list of photos by datetime, and by different locations. By clicking the photo, can view each photo description. It contains search function allowing to search keywords in either location and createdBy. It also bookmark function to save the favorite photos.
 
-<img width="375" height="755" alt="Screenshot 2025-10-08 at 02 27 19" src="https://github.com/user-attachments/assets/7e62aef4-37fa-41a0-9f8d-1d72b9d5cd7d" />
-<img width="375" height="737" alt="Screenshot 2025-10-08 at 02 27 42" src="https://github.com/user-attachments/assets/3215bde6-8c23-4b28-ad25-ae1fb50592a0" />
-<img width="372" height="750" alt="Screenshot 2025-10-08 at 02 28 00" src="https://github.com/user-attachments/assets/1ccd3830-0eb3-4032-a62d-13c1c696f710" />
+<img width="370" height="753" alt="Screenshot 2025-11-13 at 12 55 36" src="https://github.com/user-attachments/assets/083a7767-cc38-4372-b6f7-e8ee88cd68c8" />
+<img width="365" height="744" alt="Screenshot 2025-11-13 at 12 56 13" src="https://github.com/user-attachments/assets/41d092cc-c517-4604-a10d-94fe4f55f7b5" />
+<img width="363" height="750" alt="Screenshot 2025-11-13 at 12 56 35" src="https://github.com/user-attachments/assets/3ced6219-65dc-4aa8-8ff4-a65dcc0cfa94" />
+<img width="365" height="753" alt="Screenshot 2025-11-13 at 12 56 56" src="https://github.com/user-attachments/assets/4aa89671-ce7c-4c95-9afe-c5c588e26843" />
+<img width="364" height="751" alt="Screenshot 2025-11-13 at 12 57 40" src="https://github.com/user-attachments/assets/41bc6221-e3e8-451a-9e7d-1c9f41aae0d4" />
+<img width="368" height="753" alt="Screenshot 2025-11-13 at 12 58 36" src="https://github.com/user-attachments/assets/9beee8bb-590b-4681-aa5b-6bbb28ed63af" />
+
 
 ## Setup
 This Flutter Application is using Flutter 3.10.0, Dart 3.0. 
