@@ -51,4 +51,4 @@ Development System: MacOS Sequoia Version 15.6 (24G84)
 - Android Emulator: Pixel 6a with Google Play (API level 34)
 - Real Device: iPhone 15 Pro(iOS 18.6.2)
 
-*if fail to build this app, it can download the apk [here](https://drive.google.com/file/d/1HATSlanRM2s848SrR-anGh4BYOZ7iv4-/view?usp=sharing)
+*if fail to build this app, it can download the apk [here](https://drive.google.com/file/d/1Egb2QIu-jJXEAW8VU4sYGzCCA75mF8J0/view?usp=drive_link)
