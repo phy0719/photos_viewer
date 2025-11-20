@@ -24,6 +24,32 @@ class _SearchScreen extends State<SearchScreen> {
     super.dispose();
   }
 
+  Future<void> _developerDialogBuilder(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          icon: const Image(image: AssetImage("assets/qrcode/photos_viewer_source.png"), height: 250),
+          alignment: Alignment.center,
+          content:
+              const Text(
+                'Thank you very much for taking a look at this app. \nIt was made with Flutter. \nThe source code has been uploaded to my GitHub workspace.',
+              ),
+
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+              child: const Text('Dismiss'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final dateFormat = getIt<PhotosModel>().generalDatetimeFormat;
@@ -34,9 +60,14 @@ class _SearchScreen extends State<SearchScreen> {
           return SafeArea(
               child: Column(
                 children: [
-                  const ListTile(
-                      leading: Icon(Icons.edit_note),
-                      title: Text('Developed by Yan Poon in Year 2025.')
+                  GestureDetector(
+                    onTap: () {
+                      _developerDialogBuilder(context);
+                    },
+                    child: const ListTile(
+                        leading: Icon(Icons.edit_note),
+                        title: Text('Developed by Yan Poon in Year 2025.')
+                    )
                   ),
                   SearchAnchor(
                     builder: (BuildContext context, SearchController controller) {
